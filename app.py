@@ -1,4 +1,4 @@
-import streamlit as st
+mport streamlit as st
 import google.generativeai as genai
 from PIL import Image
 
@@ -34,6 +34,44 @@ if "GOOGLE_API_KEY" in st.secrets:
                         response = model.generate_content([prompt, img])
                     else:
                         response = model.generate_content(prompt)
+                    st.markdown(response.text)
+                except Exception as e:
+                    st.error(f"خطأ: {e}")
+else:
+    st.error("⚠️ يا إمبراطور، تأكد من إضافة GOOGLE_API_KEY في الـ Secrets!")import streamlit as st
+import google.generativeai as genai
+from PIL import Image
+import os
+
+# --- إعدادات الواجهة الملكية ---
+st.set_page_config(page_title="JOSEPH FAHMY AI", page_icon="👑")
+
+# تصميم ذهبي وملكي فاخر
+st.markdown("""
+    <style>
+    .stApp { background-color: #000000; }
+    h1 { color: #D4AF37; text-align: center; font-family: 'serif'; font-size: 50px; }
+    .stChatInputContainer { border: 2px solid #D4AF37; border-radius: 30px; }
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- عرض اللوجو الملكي ---
+# الكود ده بيدور على الصورة اللي رفعتها وبيعرضها في نص الصفحة
+if os.path.exists("logo.jpg"):
+    st.image("logo.jpg", use_container_width=True)
+else:
+    st.markdown("<h1>🔱 JOSEPH FAHMY AI </h1>", unsafe_allow_html=True)
+
+# --- تفعيل المحرك الصاروخي Gemini 1.5 Flash ---
+if "GOOGLE_API_KEY" in st.secrets:
+    genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    
+    if prompt := st.chat_input("أمرك مطاع يا جوزيف... اكتب سؤالك"):
+        with st.chat_message("assistant"):
+            with st.spinner("🚀 جاري الحل بسرعة الصاروخ..."):
+                try:
+                    response = model.generate_content(prompt)
                     st.markdown(response.text)
                 except Exception as e:
                     st.error(f"خطأ: {e}")
